@@ -1,7 +1,9 @@
-const { Product } = require('../dbmodels/association');
+const { Product } = require('../dbmodels');
 
 async function addProduct(data) {
+
     const { name, price, stock } = data;
+
     return await Product.create({
         name,
         price,
@@ -22,7 +24,13 @@ async function updateProduct(id, data) {
         throw new Error('Product not found');
     }
 
-    await product.update(data);
+    const { name, price, stock } = data;
+
+    await product.update({
+        name,
+        price,
+        stock
+    });
 
     return product;
 }

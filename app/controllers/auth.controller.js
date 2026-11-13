@@ -1,47 +1,47 @@
-const authService = require('../models/auth.model');
+const authService = require('../services/auth.service');
+const response = require('../utils/response');
 
 async function register(req, res) {
 
     try {
 
-        const { userName, email, password } = req.body;
-
-        if (!userName || !email || !password) {
-
-            throw new Error('All fields are required');
-        }
         const user = await authService.registerUser(req.body);
 
-        res.status(201).json({
-            message: 'User registered successfully',
-            data: user
-        });
+        return response.success(
+            res,
+            201,
+            'User registered successfully',
+            user
+        );
 
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
-        });
+    } catch (err) {
+
+        return response.error(res, 400, err.message);
+
     }
 }
 
 async function login(req, res) {
 
     try {
+
         const result = await authService.loginUser(req.body);
 
         res.cookie('token', result.token, {
-            httpOnly: true,
+            httpOnly: true
         });
 
-        res.status(200).json({
-            message: 'Login successful',
-            data: result.user
-        });
+        return response.success(
+            res,
+            200,
+            'Login successful',
+            result.user
+        );
 
-    } catch (error) {
-        res.status(400).json({
-            message: error.message
-        });
+    } catch (err) {
+
+        return response.error(res, 400, err.message);
+
     }
 }
 
@@ -49,9 +49,11 @@ function logout(req, res) {
 
     res.clearCookie('token');
 
-    res.json({
-        message: 'Logout successful'
-    });
+    return response.success(
+        res,
+        200,
+        'Logout successful'
+    );
 }
 
 module.exports = {

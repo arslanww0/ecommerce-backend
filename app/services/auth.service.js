@@ -1,9 +1,11 @@
-const { User } = require('../dbmodels/association');
+const { User } = require('../dbmodels');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 async function registerUser(data) {
+
     const { userName, email, password } = data;
+
     const existingUser = await User.findOne({
         where: { email }
     });
@@ -20,11 +22,17 @@ async function registerUser(data) {
         password: hashedPassword
     });
 
-    return user;
+    const userData = user.toJSON();
+
+    delete userData.password;
+
+    return userData;
 }
 
 async function loginUser(data) {
-    const { email, password } = req.body;
+
+    const { email, password } = data;
+
     const user = await User.findOne({
         where: { email }
     });
@@ -53,7 +61,14 @@ async function loginUser(data) {
         }
     );
 
-    return { token, user };
+    const userData = user.toJSON();
+
+    delete userData.password;
+
+    return {
+        token,
+        user: userData
+    };
 }
 
 module.exports = {
