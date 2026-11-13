@@ -1,4 +1,4 @@
-const { Product } = require('../dbmodels');
+const { Product } = require('../models');
 
 async function addProduct(data) {
 
