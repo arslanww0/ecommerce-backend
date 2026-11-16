@@ -1,4 +1,4 @@
-const { User, Product, Order } = require('../models');
+const { User, Product, Order } = require('../models/dbModel');
 const { connection } = require('../config/db');
 
 async function placeOrder(userId, data) {

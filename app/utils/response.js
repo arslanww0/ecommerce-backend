@@ -1,7 +1,7 @@
 function success(res, statusCode, message, data = null) {
 
     return res.status(statusCode).json({
-        success: true,
+        success: statusCode,
         message,
         data
     });
@@ -10,7 +10,7 @@ function success(res, statusCode, message, data = null) {
 function error(res, statusCode, message) {
 
     return res.status(statusCode).json({
-        success: false,
+        success: statusCode,
         message
     });
 }
