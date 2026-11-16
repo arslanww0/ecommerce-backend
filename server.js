@@ -5,11 +5,11 @@ const { connection, connectDB } = require('./app/config/db');
 
 require('./app/models/dbModel');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 const asyndb = async () => {
     await connectDB();
-    await connection.sync();
+    await connection.sync({});
     app.listen(PORT, (() => {
         console.log(`Server Start on http://localhost:${PORT}`);
     }))

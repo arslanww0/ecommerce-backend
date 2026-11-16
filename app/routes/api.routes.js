@@ -5,7 +5,7 @@ const authController = require('../controllers/auth.controller');
 const productController = require('../controllers/product.controller');
 const orderController = require('../controllers/order.controller');
 
-const { auth, admin } = require('../middlewares/middleware');
+const { auth, admin } = require('../middlewares/auth.middleware');
 
 const {
     validateRegister,
