@@ -15,7 +15,9 @@ const {
     validateOrder
 } = require('../middlewares/validation');
 
-// Auth Routes
+/**
+ * Auth Routes
+ */
 
 router.post(
     '/auth/register',
@@ -34,8 +36,9 @@ router.post(
     authController.logout
 );
 
-// Product Routes
-
+/**
+ * Product Routes
+ */
 router.get(
     '/products/get-products',
     productController.getProducts
@@ -64,7 +67,9 @@ router.delete(
     productController.deleteProduct
 );
 
-// Order Routes
+/**
+ * Order Routes
+ */
 
 router.post(
     '/orders/place-order',
