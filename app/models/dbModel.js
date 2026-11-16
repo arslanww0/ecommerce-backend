@@ -107,8 +107,9 @@ const Order = connection.define('Order', {
 
 });
 
-// Associations
-
+/**
+ * Association between the tables
+ */
 User.hasMany(Order, {
     foreignKey: 'userId'
 });
