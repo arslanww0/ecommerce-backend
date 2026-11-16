@@ -41,10 +41,7 @@ async function loginUser(data) {
         throw new Error('User not found');
     }
 
-    const isMatch = await bcrypt.compare(
-        password,
-        user.password
-    );
+    const isMatch = await bcrypt.compare(password,user.password);
 
     if (!isMatch) {
         throw new Error('Invalid password');

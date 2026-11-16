@@ -28,13 +28,15 @@ async function placeOrder(userId, data) {
             productId,
             quantity,
             totalPrice
-        }, {
+        },
+        {
             transaction
         });
 
         await product.update({
             stock: product.stock - quantity
-        }, {
+        }, 
+        {
             transaction
         });
 
@@ -44,7 +46,7 @@ async function placeOrder(userId, data) {
 
 async function getMyOrders(userId) {
 
-    return await Order.findAll({
+    const orders = await Order.findAll({
         where: {
             userId
         },
@@ -54,6 +56,12 @@ async function getMyOrders(userId) {
             }
         ]
     });
+
+    if (orders.length === 0) {
+        throw new Error('You have not placed any orders yet');
+    }
+
+    return orders;
 }
 
 async function getAllOrders() {

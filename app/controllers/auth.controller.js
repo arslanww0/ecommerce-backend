@@ -4,9 +4,7 @@ const response = require('../utils/response');
 async function register(req, res) {
 
     try {
-
         const user = await authService.registerUser(req.body);
-
         return response.success(
             res,
             201,

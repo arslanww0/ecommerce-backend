@@ -13,7 +13,7 @@ const {
     validateProduct,
     validateUpdateProduct,
     validateOrder
-} = require('../validations/validation');
+} = require('../middlewares/validation');
 
 // Auth Routes
 
