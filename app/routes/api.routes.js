@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const passport = require('passport');
-
 const authController = require('../controllers/auth.controller');
 const productController = require('../controllers/product.controller');
 const orderController = require('../controllers/order.controller');
 
-const { admin } = require('../middlewares/auth.middleware');
+const { auth, admin } = require('../middlewares/auth.middleware');
 
 const {
     validateRegister,
@@ -17,42 +15,38 @@ const {
     validateOrder
 } = require('../middlewares/validation');
 
+/**
+ * Auth Routes
+ */
 
-// REGISTER
 router.post(
     '/auth/register',
     validateRegister,
     authController.register
 );
 
-
-// LOGIN
 router.post(
     '/auth/login',
     validateLogin,
-    passport.authenticate('local', { session: false }),
     authController.login
 );
 
-
-// LOGOUT
 router.post(
     '/auth/logout',
     authController.logout
 );
 
-
-// PUBLIC PRODUCT ROUTE
+/**
+ * Product Routes
+ */
 router.get(
     '/products/get-products',
     productController.getProducts
 );
 
-
-// ADMIN PRODUCT ROUTES
 router.post(
     '/products/add-product',
-    passport.authenticate('jwt', { session: false }),
+    auth,
     admin,
     validateProduct,
     productController.addProduct
@@ -60,7 +54,7 @@ router.post(
 
 router.put(
     '/products/update-product/:id',
-    passport.authenticate('jwt', { session: false }),
+    auth,
     admin,
     validateUpdateProduct,
     productController.updateProduct
@@ -68,29 +62,31 @@ router.put(
 
 router.delete(
     '/products/delete-product/:id',
-    passport.authenticate('jwt', { session: false }),
+    auth,
     admin,
     productController.deleteProduct
 );
 
+/**
+ * Order Routes
+ */
 
-// ORDER ROUTES
 router.post(
     '/orders/place-order',
-    passport.authenticate('jwt', { session: false }),
+    auth,
     validateOrder,
     orderController.placeOrder
 );
 
 router.get(
     '/orders/my-orders',
-    passport.authenticate('jwt', { session: false }),
+    auth,
     orderController.getMyOrders
 );
 
 router.get(
     '/orders/all-orders',
-    passport.authenticate('jwt', { session: false }),
+    auth,
     admin,
     orderController.getAllOrders
 );
