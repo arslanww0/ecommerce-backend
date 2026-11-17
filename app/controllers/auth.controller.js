@@ -1,10 +1,11 @@
 const authService = require('../services/auth.service');
 const response = require('../utils/response');
+const jwt = require('jsonwebtoken');
 
 async function register(req, res) {
-
     try {
         const user = await authService.registerUser(req.body);
+
         return response.success(
             res,
             201,
@@ -13,38 +14,52 @@ async function register(req, res) {
         );
 
     } catch (err) {
-
         return response.error(res, 400, err.message);
-
     }
 }
 
-async function login(req, res) {
 
+function login(req, res) {
     try {
+        // Passport Local Strategy ne user verify kiya hai
+        const user = req.user;
 
-        const result = await authService.loginUser(req.body);
+        const token = jwt.sign(
+            {
+                id: user.id,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: '1d'
+            }
+        );
 
-        res.cookie('token', result.token, {
-            httpOnly: true
+        const userData = user.toJSON();
+
+        delete userData.password;
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000
         });
 
         return response.success(
             res,
             200,
             'Login successful',
-            result.user
+            userData
         );
 
     } catch (err) {
-
-        return response.error(res, 400, err.message);
-
+        return response.error(res, 500, err.message);
     }
 }
 
-function logout(req, res) {
 
+function logout(req, res) {
     res.clearCookie('token');
 
     return response.success(
